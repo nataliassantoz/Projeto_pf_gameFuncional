@@ -10,10 +10,10 @@
     font-family: 'Courier New', Courier, monospace;
     font-weight: 900;
     font-size: 30px;
-    color: black;
+    color: rgb(20, 20, 20);
 }
 
-#canario {
+#cenario {
     position: relative;
     width: 100vw;
     height: 100vh;
@@ -27,18 +27,24 @@
 
 #menu{
     width: 80vw;
-    height: 80vh;
+    height: 10vh;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 20px;
 }
 
-/*FALTA ESTILIZAR O ESTUDNTE*/
-#estudante{
-    width: 80vw;
-    height: 80vw;
-    display: flex;
 
+#estudante{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    background-image: url('../resources/estudante.webp'); /* Ajuste o caminho para a imagem  tirar daqui e chamar uma funcao */
+    background-position: center; /* Centraliza a imagem de fundo */
+    background-repeat: no-repeat; /* Não repete a imagem */
+    background-size: contain;
+    bottom: 0;
 
 }
 
@@ -48,4 +54,11 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    display: block;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer; /* quando o mouse pasasar em cima do botao, vai virar uma mao*/
+
+
+
 }
