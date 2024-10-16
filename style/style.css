@@ -1,8 +1,51 @@
-body {
+* {
     margin: 0;
     padding: 0;
-    background-image: url('../resources/fundo.jpg'); /* Caminho para a imagem de fundo */
-    background-size: cover; /* Cobre toda a tela */
-    background-position: center; /* Centraliza a imagem */
-    font-family: Arial, sans-serif; /* Define a fonte padrão */
+    border: none; /* Corrigido de 'nome' para 'none' */
+    outline: none;
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 900;
+    font-size: 30px;
+    color: black;
+}
+
+#canario {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-image: url('../resources/fundo2.jpg'); /* Ajuste o caminho para a imagem  tirar daqui e chamar uma funcao */
+    background-position: center; /* Centraliza a imagem de fundo */
+    background-repeat: no-repeat; /* Não repete a imagem */
+    background-size: cover; /* Faz a imagem cobrir toda a área do body */
+}
+
+#menu{
+    width: 80vw;
+    height: 80vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/*FALTA ESTILIZAR O ESTUDNTE*/
+#estudante{
+    width: 80vw;
+    height: 80vw;
+    display: flex;
+
+
+}
+
+#iniciar{
+    position: absolute;
+    color: black ;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
