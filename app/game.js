@@ -8,7 +8,7 @@ const alturaCenario = cenario.offsetHeight;
 const larguraEstudante = estudante.offsetWidth;
 const alturaEstudante = estudante.offsetHeight;
 
-// Inicializa as posições e direções do estudante
+// Inicializa as posições e direções do estudante *****PRECISA MUDAR, PRA QUANDO O BONECO INICAR O JOGO, FICA NO MEIO
 let posicaoHorizontal = 0; 
 let posicaoVertical = 0;   
 let direcaoHorizontal = 0; 
@@ -69,6 +69,19 @@ const moverEstudante = () => {
     estudante.style.left = posicaoHorizontal + "px";
     estudante.style.top = posicaoVertical + "px"; 
 }
+const tiroLivros = (posicaoLeftLivro, posicaoTopLivro) => {
+    const livro = document.createElement("div");
+    livro.className = "livro";
+    livro.style.position = "absolute";
+    livro.style.width = "10px";
+    livro.style.height = "10px";
+    livro.style.background = "red";
+    livro.style.left = posicaoposicaoLeftLivro + "px";
+    livro.style.top = posicaoposicaoTopLivro + "px";
+    cenario.appendChild(livro)
+
+}
+
 
 // Função para iniciar o jogo
 const iniciarJogo = () => {
