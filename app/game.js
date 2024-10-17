@@ -9,12 +9,13 @@ const larguraEstudante = estudante.offsetWidth;
 const alturaEstudante = estudante.offsetHeight;
 
 // Inicializa as posições e direções do estudante *****PRECISA MUDAR, PRA QUANDO O BONECO INICAR O JOGO, FICA NO MEIO
-let posicaoHorizontal = 0; 
-let posicaoVertical = 0;   
+let posicaoHorizontal = larguraCenario / 2 - larguraEstudante / 2; // Começa no meio horizontal
+let posicaoVertical = alturaCenario / 2 - alturaEstudante / 2; 
 let direcaoHorizontal = 0; 
 let direcaoVertical = 0;  
 
 const velocidade = 15; 
+let estaAtirando = false;
 
 // Ocultando o botão ao iniciar o jogo
 const botaoInciar = document.getElementById("iniciar"); // Corrigido para "iniciar"
@@ -69,19 +70,49 @@ const moverEstudante = () => {
     estudante.style.left = posicaoHorizontal + "px";
     estudante.style.top = posicaoVertical + "px"; 
 }
-const tiroLivros = (posicaoLeftLivro, posicaoTopLivro) => {
+
+
+//************************************************************************************************************ */
+                                        //VERIFICAR SE REALMENTE ESTA EM FUNCIONAL *** MOSTRAR A KALIL
+
+                                        
+
+
+const tiroLivros = (posicaoLeftLivro, posicaoTopLivro) => {                 
     const livro = document.createElement("div");
     livro.className = "livro";
     livro.style.position = "absolute";
-    livro.style.width = "10px";
+    livro.style.width = "10px";     
     livro.style.height = "10px";
     livro.style.background = "red";
-    livro.style.left = posicaoposicaoLeftLivro + "px";
-    livro.style.top = posicaoposicaoTopLivro + "px";
+    livro.style.left = posicaoLeftLivro + "px";
+    livro.style.top = posicaoTopLivro + "px";
     cenario.appendChild(livro)
 
 }
 
+
+
+//funcao que esta chamando tiro livros
+
+const atirar = () => {
+    if(estaAtirando){
+        tiroLivros(posicaoHorizontal + 45, posicaoVertical -10);  //O 45 É PRO TIRO FICA NA FRENTE DO BONECO
+    }
+}
+
+document.addEventListener("keydown", (tecla) => {
+    if(tecla.key === " "){
+        estaAtirando = true;
+    }
+});
+
+document.addEventListener("keyup", (tecla) => {
+    if(tecla.key === " "){
+        estaAtirando = false;
+    }
+});
+//                          PROXIMO PASSO É FAZER O TIRO SE DESLOCAR 
 
 // Função para iniciar o jogo
 const iniciarJogo = () => {
@@ -89,7 +120,12 @@ const iniciarJogo = () => {
     document.addEventListener("keydown", teclaPressionada); // Correção para "keydown"
     document.addEventListener("keyup", teclaNaoPressionada); // Correção para "keyup"
 
-    // Chama a função moverEstudante a cada 50ms
-    let checaMoveEstudante = setInterval(moverEstudante, 50);
+    const movendoEstudante = setInterval(moverEstudante, 50);
+
+    // Verifica e lança livros a cada 100ms
+    const checandoTiros =  setInterval(atirar, 10);
+    // // Chama a função moverEstudante a cada 50ms
+    // let checaMoveEstudante = setInterval(moverEstudante, 50);
     botaoInciar.style.display = "none"; // Oculta o botão de iniciar
+    // let checalivros = setInterval(atirar, 10);
 }

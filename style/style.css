@@ -19,7 +19,7 @@
     height: 100vh;
     display: flex;
     justify-content: center;
-    background-image: url('../resources/fundo2.jpg'); /* Ajuste o caminho para a imagem  tirar daqui e chamar uma funcao */
+    background-image: url('../resources/fundo.jpg'); /* Ajuste o caminho para a imagem  tirar daqui e chamar uma funcao */
     background-position: center; /* Centraliza a imagem de fundo */
     background-repeat: no-repeat; /* Não repete a imagem */
     background-size: cover; /* Faz a imagem cobrir toda a área do body */
