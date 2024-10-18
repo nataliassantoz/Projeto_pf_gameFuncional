@@ -37,8 +37,8 @@
 
 #estudante{
     position: absolute;
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     display: flex;
     background-image: url('../resources/estudante.webp'); /* Ajuste o caminho para a imagem  tirar daqui e chamar uma funcao */
     background-position: center; /* Centraliza a imagem de fundo */
