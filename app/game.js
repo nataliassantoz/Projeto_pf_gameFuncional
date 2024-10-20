@@ -110,6 +110,49 @@ const atualizarDirecao = (estado, tecla, valor) => {
     }
 };
 
+//verificar se ta funcional e adicionar o que falta
+const Criarchefe = (larguraCenario) => ({
+    className: "chefe",
+    //vida: , 
+    width: " ", 
+    height: " ",
+    backgroundImage: "url()",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "contain",
+    left: `/*nao sei o que coloca aqui*/`, 
+    top: "0px"
+  });
+  
+  const criarElementoChefe = (chefe) => {
+    const div = document.createElement("div");
+    div.className = chefe.className;
+    div.style.position = "absolute";
+    div.setAttribute("data-vida", chefe.vida);
+    div.style.width = chefe.width;
+    div.style.height = chefe.height;
+    div.style.backgroundImage = chefe.backgroundImage;
+    div.style.backgroundPosition = chefe.backgroundPosition;
+    div.style.backgroundRepeat = chefe.backgroundRepeat;
+    div.style.backgroundSize = chefe.backgroundSize;
+    div.style.left = chefe.left;
+    div.style.top = chefe.top;
+    return div; 
+  };
+  
+  const AdicionarChefe = (cenario, chefe) => {
+    const novoElementoChefe = criarElementoChefe(chefe);
+    const novoCenario = [...cenario, novoElementoChefe];
+    return novoCenario; 
+  };
+  //completar aqui e testar tudo
+  /*const dcompChefe = (larguraCenario, cenario) => {
+    const chefe = criarChefe(larguraCenario);
+    const novoCenario = adicionarChefeAoCenario(cenario, chefe);
+    return novoCenario;
+  };*/
+  
+
 // Função para lidar com eventos de tecla pressionada
 const teclaPressionada = (estado, tecla) => atualizarDirecao(estado, tecla, 1);
 
