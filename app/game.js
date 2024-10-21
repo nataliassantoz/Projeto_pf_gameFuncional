@@ -110,8 +110,11 @@ const atualizarDirecao = (estado, tecla, valor) => {
     }
 };
 
+let chefeAdicionado = false;
 //verificar se ta funcional e adicionar o que falta
 const adicionarChefe = (cenario) => {
+    if (chefeAdicionado) return;
+    
     const chefe = document.createElement("div");
     chefe.id = "chefe";
     const larguraCenario = cenario.offsetWidth;
@@ -119,6 +122,8 @@ const adicionarChefe = (cenario) => {
     chefe.style.left = `${posicaoAleatoria}px`;
     chefe.setAttribute("vida", 3);
     cenario.appendChild(chefe);
+    
+    chefeAdicionado = true; 
   };
   
 
@@ -158,6 +163,28 @@ const teclaPressionada = (estado, tecla) => atualizarDirecao(estado, tecla, 1);
 // Função para lidar com eventos de tecla liberada
 const teclaNaoPressionada = (estado, tecla) => atualizarDirecao(estado, tecla, 0);
 
+
+
+const movimentochefe= (chefe, larguraCenario) => {
+    let direcaochefe = 1; 
+
+    const loopchefe = () => {
+        const posicaoAtual = parseInt(chefe.style.left) || 0;
+        const novaposicao = posicaoAtual + direcao *5;
+
+        if (novaposicao <= 0 || novaposicao >= larguraCenario - 100) {
+            direcao *= -1; // Inverte a direção
+    }
+    chefe.style.left = `${novaposicao}px`;
+        requestAnimationFrame(loopchefe);
+    };
+
+    loopChefe();
+}
+
+const criarTirosDochefe = (cenario, chefe) => {
+    
+}
 // Função principal para iniciar o jogo
 const iniciarJogo = () => {
     const {cenario, estudante, botaoIniciar} = elementosHTML();
@@ -166,7 +193,7 @@ const iniciarJogo = () => {
 
 
     const loop = () => {
-        estado = moverEstudante(estado, larguraCenario, alturaCenario, larguraEstudante, alturaEstudante);
+        estado = moverEstudante(estado,larguraCenario, larguraEstudante, alturaCenario, alturaEstudante);
         manipularDom(estudante, estado);
         requestAnimationFrame(loop);
     };

@@ -62,8 +62,8 @@
 
 #chefe{
     position: absolute;
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     background-image: url('../resources/bos.png'); 
     background-position: center;
     background-repeat: no-repeat;
