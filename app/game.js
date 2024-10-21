@@ -31,7 +31,7 @@ const calcularPosicaoInicial = (larguraCenario, larguraEstudante, alturaCenario,
     direcaoVertical: 0
 });
 
-
+//*** */
 //funcao para atualizar a posicao do boneco, onde recebe 3 parametros.A funcao é responsavel por garantir que o boneco nao saia da tela
 const atualizarPosicao = (posicaoAtual, direcao, limite) => {
     const velocidade = 10; 
@@ -43,11 +43,10 @@ const atualizarPosicao = (posicaoAtual, direcao, limite) => {
 
 
 const moverEstudante = (estado,larguraCenario, larguraEstudante, alturaCenario, alturaEstudante) => {
-    const estadoAtual = {...estado}
-    const novaPosicaoHorizontal = atualizarPosicao(estadoAtual.horizontal, estadoAtual.direcaoHorizontal, larguraCenario - larguraEstudante);
-    const novaPosicaoVertical = atualizarPosicao(estadoAtual.vertical, estadoAtual.direcaoVertical, alturaCenario - alturaEstudante );
+    const novaPosicaoHorizontal = atualizarPosicao(estado.horizontal, estado.direcaoHorizontal, larguraCenario - larguraEstudante);
+    const novaPosicaoVertical = atualizarPosicao(estado.vertical, estado.direcaoVertical, alturaCenario - alturaEstudante );
 
-    return { ...estadoAtual, horizontal: novaPosicaoHorizontal, vertical: novaPosicaoVertical };
+    return { ...estado, horizontal: novaPosicaoHorizontal, vertical: novaPosicaoVertical };
 };
 
 
@@ -56,17 +55,18 @@ const manipularDom = (estudante, estado) => {
     estudante.style.top = `${estado.vertical}px`;
 }
 //refazer***
+
 //funcao que atualiza oe integra a funcao moverEstudante e moverEstudante
- const atualizarJogo = (estado, estudante) => {
-    const novoEstado = moverEstudante(estado);
-    manipularDom(estudante, novoEstado);
-    return novoEstado;
- }
+//  const atualizarJogo = (estado, estudante) => {
+//     const novoEstado = moverEstudante(estado);
+//     manipularDom(estudante, novoEstado);
+//     return novoEstado;
+//  }
 
 
 
 // refazer
-const Criartiros = (left, top) => {                 
+const Criartiros = (cenario, left, top) => {                 
     const tiro = document.createElement("div");
     tiro.className = "livro";
     tiro.style.position = "absolute";
@@ -93,8 +93,8 @@ const moverTiros = (tiro) => {
 
 //refazer
 // Função pura para disparar o tiro
-const atirar = (estado) => {
-    const tiro = Criartiros(estado.horizontal + larguraEstudante / 2, estado.vertical - 10);
+const atirar = ( cenario, estado, larguraEstudante) => {
+    const tiro = Criartiros(cenario, estado.horizontal + larguraEstudante / 2, estado.vertical - 10);
     moverTiros(tiro);
     return estado;
 };
@@ -111,40 +111,39 @@ const atualizarDirecao = (estado, tecla, valor) => {
 };
 
 //verificar se ta funcional e adicionar o que falta
-const Criarchefe = (larguraCenario) => ({
-    className: "chefe",
-    //vida: , 
-    width: " ", 
-    height: " ",
-    backgroundImage: "url()",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "contain",
-    left: `/*nao sei o que coloca aqui*/`, 
-    top: "0px"
-  });
-  
-  const criarElementoChefe = (chefe) => {
-    const div = document.createElement("div");
-    div.className = chefe.className;
-    div.style.position = "absolute";
-    div.setAttribute("data-vida", chefe.vida);
-    div.style.width = chefe.width;
-    div.style.height = chefe.height;
-    div.style.backgroundImage = chefe.backgroundImage;
-    div.style.backgroundPosition = chefe.backgroundPosition;
-    div.style.backgroundRepeat = chefe.backgroundRepeat;
-    div.style.backgroundSize = chefe.backgroundSize;
-    div.style.left = chefe.left;
-    div.style.top = chefe.top;
-    return div; 
+const adicionarChefe = (cenario) => {
+    const chefe = document.createElement("div");
+    chefe.id = "chefe";
+    const larguraCenario = cenario.offsetWidth;
+    const posicaoAleatoria = Math.random() * (larguraCenario - 100); // 100 é a largura do chefe
+    chefe.style.left = `${posicaoAleatoria}px`;
+    chefe.setAttribute("vida", 3);
+    cenario.appendChild(chefe);
   };
   
-  const AdicionarChefe = (cenario, chefe) => {
-    const novoElementoChefe = criarElementoChefe(chefe);
-    const novoCenario = [...cenario, novoElementoChefe];
-    return novoCenario; 
-  };
+
+//   const criarElementoChefe = (chefe) => {
+//     const div = document.createElement("div");
+//     div.className = chefe.className;
+//     div.style.position = "absolute";
+//     div.setAttribute("data-vida", chefe.vida);
+//     div.style.width = chefe.width;
+//     div.style.height = chefe.height;
+//     div.style.backgroundImage = chefe.backgroundImage;
+//     div.style.backgroundPosition = chefe.backgroundPosition;
+//     div.style.backgroundRepeat = chefe.backgroundRepeat;
+//     div.style.backgroundSize = chefe.backgroundSize;
+//     div.style.left = chefe.left;
+//     div.style.top = chefe.top;
+//     return div; 
+//   };
+  
+//   const AdicionarChefe = (cenario, chefe) => {
+//     const novoElementoChefe = criarElementoChefe(chefe);
+//     const novoCenario = [...cenario, novoElementoChefe];
+//     return novoCenario; 
+//   };
+
   //completar aqui e testar tudo
   /*const dcompChefe = (larguraCenario, cenario) => {
     const chefe = criarChefe(larguraCenario);
@@ -161,26 +160,33 @@ const teclaNaoPressionada = (estado, tecla) => atualizarDirecao(estado, tecla, 0
 
 // Função principal para iniciar o jogo
 const iniciarJogo = () => {
-    let estado = calcularPosicaoInicial();
+    const {cenario, estudante, botaoIniciar} = elementosHTML();
+    const { larguraCenario, alturaCenario, larguraEstudante, alturaEstudante } = obterDimensoesDoCenario(cenario, estudante);
+    let estado = calcularPosicaoInicial(larguraCenario, larguraEstudante, alturaCenario, alturaEstudante);
+
 
     const loop = () => {
-        estado = moverEstudante(estado);
+        estado = moverEstudante(estado, larguraCenario, alturaCenario, larguraEstudante, alturaEstudante);
+        manipularDom(estudante, estado);
         requestAnimationFrame(loop);
     };
     loop();
 
     document.addEventListener("keydown", (event) => {
         estado = teclaPressionada(estado, event.key);
-        if (event.key === " ") estado = atirar(estado);
+        if (event.key === " ") estado = atirar(cenario, estado, larguraEstudante);
     });
 
     document.addEventListener("keyup", (event) => {
         estado = teclaNaoPressionada(estado, event.key);
     });
+    adicionarChefe(cenario);
+
 
     botaoIniciar.style.display = "none";
 };
 
+const { botaoIniciar } = elementosHTML();
 // Associar a função iniciar ao botão
 botaoIniciar.addEventListener("click", iniciarJogo);
 
