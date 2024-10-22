@@ -149,6 +149,66 @@ const moverTiros = (tiro, boss) => {
     }
   };
 
+  // Função para mover tiros do boss com verificação de colisão
+const moverTirosBoss = (tiro, aluno, callback) => {
+    const loopTiro = () => {
+      const posicaoAtual = parseInt(tiro.style.top) || 0;
+      tiro.style.top = `${posicaoAtual + 5}px`;
+  
+      const pontuacao = verificarColisaoBossComAluno(tiro, aluno);
+  
+      if (pontuacao === 0) {
+        callback(true);
+      }
+  
+      if (posicaoAtual > window.innerHeight) {
+        tiro.remove();
+      } else {
+        requestAnimationFrame(loopTiro);
+      }
+    };
+    loopTiro();
+  };
+
+  // Funções para verificar colisões
+const verificarColisaoAlunoComBoss = (tiro, boss) => {
+    const tiroRect = tiro.getBoundingClientRect();
+    const bossRect = boss.getBoundingClientRect();
+  
+    if (
+      tiroRect.top < bossRect.bottom &&
+      tiroRect.bottom > bossRect.top &&
+      tiroRect.left < bossRect.right &&
+      tiroRect.right > bossRect.left
+    ) {
+      console.log("Tiro do aluno atingiu o boss!");
+  
+      tiro.remove();
+      return aumentarPontosAluno();
+    }
+  
+    return 0;
+  };
+
+const verificarColisaoBossComAluno = (tiro, aluno) => {
+    const tiroRect = tiro.getBoundingClientRect();
+    const alunoRect = aluno.getBoundingClientRect();
+  
+    if (
+      tiroRect.top < alunoRect.bottom &&
+      tiroRect.bottom > alunoRect.top &&
+      tiroRect.left < alunoRect.right &&
+      tiroRect.right > alunoRect.left
+    ) {
+      console.log("Tiro do boss atingiu o aluno!");
+  
+      tiro.remove();
+      return aplicarDanoAluno();
+    }
+  
+    return;
+  };
+  
 // Função pura para disparar o tiro
 const atirar = ( cenario, estado, larguraEstudante, boss) => {
     const tiro = Criartiros(cenario, estado.horizontal + larguraEstudante / 2, estado.vertical - 10);
