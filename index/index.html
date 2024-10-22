@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style/style.css"> <!-- Correção do caminho do CSS -->
+    <link rel="stylesheet" href="../style/style.css">
     <title>Dcomp Defender</title>
 </head>
 
 <body>
-    <div id = "cenario"> <!-- Correção do id -->
+    <div id = "cenario"> 
         <div id = "menu" >
             <div id="vida">Vida do estudante: 100</div>
             <div id="pontos">Pontos: 0</div>
@@ -16,6 +16,9 @@
         <div id="estudante"></div>
         <button type="button" id="iniciar" onclick= "iniciarJogo()" >Iniciar Semestre letivo</button>
     </div>
+    <audio id="musicaFundo" src="../resources/audio.mp3" loop></audio>
+    <audio id="musicaFundoDerrota" src="../resources/derrota.mp3" loop></audio>
+
     <script src="../app/game.js" defer></script>
 </body>
 </html>

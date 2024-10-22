@@ -48,7 +48,19 @@ const getValorDiv = (id) => {
   };
   
   // =============================================================================
-  
+  const carregarAudio = () => {
+    const musicaFundo = document.getElementById("musicaFundo");
+    musicaFundo.play().catch((error) => {
+      console.error("Erro ao reproduzir áudio:", error);
+    });
+  };
+
+  const carregarAudioDerrota = () => {
+    const musicaFundo = document.getElementById("musicaFundoDerrota");
+    musicaFundo.play().catch((error) => {
+      console.error("Erro ao reproduzir áudio:", error);
+    });
+  };
 
 // Dimensões do cenário e do estudante. Nessas 3 constantes, esta havendo a manipulaçao da DOM (document object model), onde é a representação dos elementos descritos no HTML
 //nesse caso, o cenario, o personagem estudante e o botao principal de iniciar. Esta havendo sua manipulação, pois durante o codigo, as constante estao sendo alteradas 
@@ -87,8 +99,8 @@ const calcularPosicaoInicial = (larguraCenario, larguraEstudante, alturaCenario,
 const atualizarPosicao = (posicaoAtual, direcao, limite) => {
     const velocidade = 10; 
     const novaPosicao = posicaoAtual  +  direcao * velocidade; 
-    if(novaPosicao < 0) {return 0;} 
-    if(novaPosicao > limite){ return limite;}
+    if(novaPosicao < 0) {return 0};
+    if(novaPosicao > limite){ return limite};
     return novaPosicao;
 }
 
@@ -117,7 +129,8 @@ const manipularPontuacao = (morreu) => {
     console.log(`Morreu em iniciar jogo: ${morreu}`);
     if (morreu <= 0) {
       console.log("Jogo finalizado!");
-      reiniciarJogo(); // renicia o jogo
+      carregarAudioDerrota();
+      reniciarJogo(); // renicia o jogo
     }
   };
   
@@ -270,11 +283,11 @@ const movimentochefe= (chefe, larguraCenario,  cenario, callback) => {
 
     const processarPontuacao = (morreu) => {
         console.log("movimentoChefe", morreu);
-        let pararChefe = morreu;
+       pararChefe = morreu;
         if (callback) callback(morreu); 
       };
 
-    const loopchefe = () => {
+    const loopChefe = () => {
         if(pararChefe) { return};
         
         const posicaoAtual = parseInt(chefe.style.left) || 0;
@@ -284,17 +297,19 @@ const movimentochefe= (chefe, larguraCenario,  cenario, callback) => {
             direcaochefe *= -1; 
     }
     chefe.style.left = `${novaposicao}px`;
+
     if (Math.random() < 0.05) {
         bossAtirar(cenario, novaposicao, 0, estudante, processarPontuacao);
       }
-        requestAnimationFrame(loopchefe);
+        requestAnimationFrame(loopChefe);
     };
 
-    loopChefe();
-}
+  loopChefe();
+};
 
 // Função principal para iniciar o jogo
 const iniciarJogo = () => {
+    carregarAudio();
     const {cenario, estudante, botaoIniciar} = elementosHTML();
     const { larguraCenario, alturaCenario, larguraEstudante, alturaEstudante } = obterDimensoesDoCenario(cenario, estudante);
     let estado = calcularPosicaoInicial(larguraCenario, larguraEstudante, alturaCenario, alturaEstudante);
