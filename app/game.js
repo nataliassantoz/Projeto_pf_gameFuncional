@@ -10,55 +10,56 @@ const getValorDiv = (id) => {
     return parseInt(div.textContent.match(/\d+/)[0], 10);
   };
   
-  // fucao para atualizar o valor da div
+  // função que recebe o id de uma div para ser atualizado, o novo valor que sera colocado, e um rótulo para ser exibido junto do valor
   const atualizarValorDiv = (id, novovalor, label) => {
-    const div = document.getElementById(id);
-    div.textContent = `${label}: ${novovalor}`;
+    const div = document.getElementById(id); //busca o elemento na div pelo id
+    div.textContent = `${label}: ${novovalor}`; //atualiza o texto do elemento da div em uma string no formato "label: novovalor", que foram passados na funçao
   };
   
-  // Funcao pra manipular o dano do aluno
+  // Função que reduz o valor do aluno em 2 e atualiza visualmente na tela
   const aplicarDanoAluno = () => {
-    const vidaAtual = getValorDiv("vida");
-    const novaVida = vidaAtual - 2;
+    const vidaAtual = getValorDiv("vida"); //obtém o valor da vida atual a partir do elemento no DOM com id "vida"
+    const novaVida = vidaAtual - 2; //armazena o valor da vidaAtual decrescido de 2
   
-    atualizarValorDiv("vida", novaVida, "Vida do estudante");
+    atualizarValorDiv("vida", novaVida, "Vida do estudante"); //atualiza na interface o valor da vida, e deixa no formato "Vida do estudante: novaVida"
   
-    return novaVida;
+    return novaVida; //retorna o valor "novaVida" para ser utilizado em outro lugar, se necessário
   };
   
-  // funcao pra manipular os pontos do aluno
+  // função que aumenta os pontos em 1, e atualiza na interface do jogo
   const aumentarPontosAluno = () => {
-    const pontosAtuais = getValorDiv("pontos");
-    const novosPontos = pontosAtuais + 1;
+    const pontosAtuais = getValorDiv("pontos"); //busca no DOM o valor atual de pontos através do id "pontos"
+    const novosPontos = pontosAtuais + 1; //armazena na variável 'novosPontos' os pontos atuais somados de 1
   
-    atualizarValorDiv("pontos", novosPontos, "Pontos");
+    atualizarValorDiv("pontos", novosPontos, "Pontos"); //atualiza na interface o valor dos pontos, e deixa no formato "Pontos: novosPontos"
   
-    console.log(novosPontos);
+    console.log(novosPontos); //exibe o valor dos pontos no console
   
-    return novosPontos;
+    return novosPontos; //retorna o valor de novosPontos para ser utilizado em outro lugar, se necessário
   };
   
-  // funcao para verificar o ganhador
-  const verificarVitoria = (pontos, vida) => {
+  // função que avalia o vencedor do jogo baseado nos pontos e na vida do jogador
+  const verificarVitoria = (pontos, vida) => { //recebe o valor dos pontos e vida atuais
     return {
-      alunoGanhou: pontos > 100,
-      bossGanhou: vida < 0,
-      ambos: pontos <= 100 && vida >= 0,
+      alunoGanhou: pontos > 100, //retorna 'true' se o valor de pontos for maior que 100, dando a vitória ao aluno
+      bossGanhou: vida < 0, //retorna 'true' se o valor da vida for menor que 0, dando a vitória ao chefe
+      ambos: pontos <= 100 && vida >= 0, //Retorna true se a condição do jogo ainda estiver em andamento, ou seja, os pontos do aluno são menores ou iguais a 100 e a vida do jogador é maior ou igual a 0.
     };
   };
   
-  // =============================================================================
+  // função que inicia a reprodução de uma música de fundo
   const carregarAudio = () => {
-    const musicaFundo = document.getElementById("musicaFundo");
-    musicaFundo.play().catch((error) => {
-      console.error("Erro ao reproduzir áudio:", error);
+    const musicaFundo = document.getElementById("musicaFundo"); //obtem o elemento de áudio da música de fundo no DOM
+    musicaFundo.play().catch((error) => { //reproduz a musica obtida a partir do elemento 'musicaFundo'
+      console.error("Erro ao reproduzir áudio:", error); //caso haja um erro ao reproduzir a música, registra esse erro no console e avisa na interface que houve um erro na reprodução
     });
   };
 
+  // função que inicia a reprodução da música quando o jogador ser derrotado
   const carregarAudioDerrota = () => {
-    const musicaFundo = document.getElementById("musicaFundoDerrota");
-    musicaFundo.play().catch((error) => {
-      console.error("Erro ao reproduzir áudio:", error);
+    const musicaFundo = document.getElementById("musicaFundoDerrota"); //obtém o elemento de áudio da música de derrota no DOM
+    musicaFundo.play().catch((error) => {//inicia a reprodução da música e, caso haja um erro durante a reprodução, registra o erro no console e avisa que houve um erro.
+      console.error("Erro ao reproduzir áudio:", error); 
     });
   };
 
@@ -97,35 +98,36 @@ const calcularPosicaoInicial = (larguraCenario, larguraEstudante, alturaCenario,
 
 //funcao para atualizar a posicao do boneco, onde recebe 3 parametros.A funcao é responsavel por garantir que o boneco nao saia da tela
 const atualizarPosicao = (posicaoAtual, direcao, limite) => {
-    const velocidade = 10; 
-    const novaPosicao = posicaoAtual  +  direcao * velocidade; 
-    if(novaPosicao < 0) {return 0};
-    if(novaPosicao > limite){ return limite};
-    return novaPosicao;
+    const velocidade = 10; // define uma velocidade de 10 unidades, que diz o quanto a posição irá mudar em cada atualização
+    const novaPosicao = posicaoAtual  +  direcao * velocidade; //calcula a nova posição somando a posição atual com a direção e multiplica pela velocidade
+    if(novaPosicao < 0) {return 0}; //se a nova posição for menor que 0, retorna a posição no zero para que o objeto nao saia dos limite inferior da tela
+    if(novaPosicao > limite){ return limite}; //se a nova posição for menor que 0, retorna a posição no zero para que o objeto nao saia dos limite superior da tela
+    return novaPosicao; //retorna o valor da nova posição para que possa ser usada em outro lugar, se necessário
 }
 
+// função que atualiza a posição do estudante no cenário
+const moverEstudante = (estado,larguraCenario, larguraEstudante, alturaCenario, alturaEstudante) => {// recebe o valor de estado atual do estudante, a largura e a altura, tanto do cenário quanto do estudante
+    const novaPosicaoHorizontal = atualizarPosicao(estado.horizontal, estado.direcaoHorizontal, larguraCenario - larguraEstudante); // essa variável calcula a nova posição do estudante, garantindo que saia dos limites laterais
+    const novaPosicaoVertical = atualizarPosicao(estado.vertical, estado.direcaoVertical, alturaCenario - alturaEstudante ); //faz a mesma coisa da variável acima, mas para os limites superior e inferior
 
-const moverEstudante = (estado,larguraCenario, larguraEstudante, alturaCenario, alturaEstudante) => {
-    const novaPosicaoHorizontal = atualizarPosicao(estado.horizontal, estado.direcaoHorizontal, larguraCenario - larguraEstudante);
-    const novaPosicaoVertical = atualizarPosicao(estado.vertical, estado.direcaoVertical, alturaCenario - alturaEstudante );
-
-    return { ...estado, horizontal: novaPosicaoHorizontal, vertical: novaPosicaoVertical };
+    return { ...estado, horizontal: novaPosicaoHorizontal, vertical: novaPosicaoVertical }; //a função retorna um novo estado, copiando todas as propriedades do objeto estado original, e substituindo os valores de horizontal e vertical pelas novas posições calculadas.
 };
 
-
-const manipularDom = (estudante, estado) => {
-    estudante.style.left = `${estado.horizontal}px`;                           
-    estudante.style.top = `${estado.vertical}px`;
+//função que atualiza a posição de um elemento no DOM com base nas coordenadas fornecidas no estado
+const manipularDom = (estudante, estado) => { //recebe o elemento de imagem do estudante, e um objeto que representa a posição atual do estudante na tela
+    estudante.style.left = `${estado.horizontal}px`;  //atualiza a posição do estudante através do valor 'estado.horizontal'                         
+    estudante.style.top = `${estado.vertical}px`; //atualiza a posição do estudante através do valor 'estado.horizontal'
 }
 
+//função responsável por reiniciar o jogo
 const reniciarJogo = () => {
-    const { botaoIniciar } = elementosHTML();
-    botaoIniciar.style.display = "block";
-    console.log("Jogo reniciado!");
+    const { botaoIniciar } = elementosHTML(); //desestrutura o objeto dos elementosHTML para obter a referência do botão iniciar
+    botaoIniciar.style.display = "block"; //altera a propriedade css para "block", que faz o botão ser novamente visível na tela
+    console.log("Jogo reniciado!"); //imprime no console a mensagem "jogo reiniciado"
   };
 
-  // funcao para manipular a pontuacao e parar o jogo 
-const manipularPontuacao = (morreu) => {
+  // funcao que lida com a pontuação e a finalização do jogo
+const manipularPontuacao = (morreu) => { //recebe o parametro 'morreu'
     console.log(`Morreu em iniciar jogo: ${morreu}`);
     if (morreu <= 0) {
       console.log("Jogo finalizado!");
