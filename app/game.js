@@ -185,8 +185,9 @@ const moverTirosBoss = (tiro, aluno, callback) => {
     loopTiro();
   };
 
-  // Funções para verificar colisões
-const verificarColisaoAlunoComBoss = (tiro, boss) => {
+  // funcao responsavel pra verificar se houve colisao entre o tiro do aluino e o boss, se a colisao foi feita com sucesso, o tiro é removido e os ponto do estudante aumenta.
+  const verificarColisaoAlunoComBoss = (tiro, boss) => {
+    //obtem a posicao e dimensoes do tiro e do boss
     const tiroRect = tiro.getBoundingClientRect();
     const bossRect = boss.getBoundingClientRect();
   
@@ -198,13 +199,14 @@ const verificarColisaoAlunoComBoss = (tiro, boss) => {
     ) {
       console.log("Tiro do aluno atingiu o boss!");
   
-      tiro.remove();
-      return aumentarPontosAluno();
+      tiro.remove();//removendo o tiro da tela
+      return aumentarPontosAluno();//chamndo a funcao de aumentar os pontos do estudante
     }
-  
+   // caso o tiro nao foi colidido, retorna 0
     return 0;
   };
-
+  
+    // funcao responsavel pra verificar se houve colisao entre o tiro do boss e o aluno, se a colisao foi feita com sucesso, o tiro é removido. a funcao retorna 0 e a vida do estudante decrementa
 const verificarColisaoBossComAluno = (tiro, aluno) => {
     const tiroRect = tiro.getBoundingClientRect();
     const alunoRect = aluno.getBoundingClientRect();
@@ -220,17 +222,19 @@ const verificarColisaoBossComAluno = (tiro, aluno) => {
       tiro.remove();
       return aplicarDanoAluno();
     }
-  
+    // se nao tiver nenhuma colisao, nao ira retornar nada
     return;
   };
   
-// Função pura para disparar o tiro
+// funcao cria e moviemnto o tio disparado pelo aluno
 const atirar = ( cenario, estado, larguraEstudante, boss) => {
     const tiro = Criartiros(cenario, estado.horizontal + larguraEstudante / 2, estado.vertical - 10);
     moverTiros(tiro, boss);
+    // retorna o estado atual d0  jogo
     return estado;
 };
 
+// Essa funcao cria e movimenta um tiro disparado pelo boss
 const bossAtirar = (cenario, posicaoChefeX, posicaoChefeY, aluno, callback) => {
     const tiro = Criartiros(cenario,posicaoChefeX + 50 / 2, posicaoChefeY + 5,"boss"
     );
@@ -251,47 +255,49 @@ const atualizarDirecao = (estado, tecla, valor) => {
     }
 };
 
-
+//  funcao q adiciona o boss ao cenario garantindo que ele seja criado só 1 vez
 let chefeAdicionado = false;
 const adicionarChefe = (cenario) => {
-    if (chefeAdicionado) {return};
-    
+    if (chefeAdicionado) {return};// se o boss ja foi criado,a  funcao nao faz nada
+     //criando os elemntos html pro boss
     const chefe = document.createElement("div");
     chefe.id = "chefe";
     chefe.style.position = "absolute";
-    
+    // define uma posição aleatoria para o boss no cenairo
     const posicaoAleatoria = Math.random() * (cenario.offsetWidth - 100); 
     chefe.style.left = `${posicaoAleatoria}px`;
     chefe.setAttribute("vida", 3);
+    //adicioanndo o boss no cenario
     cenario.appendChild(chefe);
     
-    chefeAdicionado = true; 
+    chefeAdicionado = true; // definindo que o bos ja foi adicionado
     return chefe;
   };
 
 
-// Função para lidar com eventos de tecla pressionada
+// Função para lidar com eventos de tecla pressionada  alterando a direcao do movimento do aluno
 const teclaPressionada = (estado, tecla) => atualizarDirecao(estado, tecla, 1);
 
-// Função para lidar com eventos de tecla liberada
+// Função para lidar com eventos de tecla liberada, encerrando o movimento do aluno
 const teclaNaoPressionada = (estado, tecla) => atualizarDirecao(estado, tecla, 0);
 
 
-
+// funcao responsavel por movimentar o boss de um lado pro outro (da largura do cenario)
 const movimentochefe= (chefe, larguraCenario,  cenario, callback) => {
-    let direcaochefe = 1; 
+    let direcaochefe = 1; //direcao inicial
+ 
+    let pararChefe = false; // flag para parar o movimento
 
-    let pararChefe = false;
-
+  // cb para processar se o boss morreu
     const processarPontuacao = (morreu) => {
         console.log("movimentoChefe", morreu);
-       pararChefe = morreu;
-        if (callback) callback(morreu); 
+       pararChefe = morreu;//encerra o movimento se o bos morrer
+        if (callback) callback(morreu); // encerra o cb se morreu
       };
-
+      // funcao repsonsavel por definir o movimento continuo do boss
     const loopChefe = () => {
         if(pararChefe) { return};
-        
+         //quando o boss atinge as bordas do cenario, inverte a posciao 
         const posicaoAtual = parseInt(chefe.style.left) || 0;
         const novaposicao = posicaoAtual + direcaochefe *5;
 
@@ -299,11 +305,12 @@ const movimentochefe= (chefe, larguraCenario,  cenario, callback) => {
             direcaochefe *= -1; 
     }
     chefe.style.left = `${novaposicao}px`;
+    // gera bos de forma aleatorio (detalhe: nao encontrei outra forma de fazer em funcional)
 
     if (Math.random() < 0.05) {
         bossAtirar(cenario, novaposicao, 0, estudante, processarPontuacao);
       }
-        requestAnimationFrame(loopChefe);
+        requestAnimationFrame(loopChefe);//continua o movimento
     };
 
   loopChefe();
@@ -311,28 +318,40 @@ const movimentochefe= (chefe, larguraCenario,  cenario, callback) => {
 
 // Função principal para iniciar o jogo
 const iniciarJogo = () => {
+  // incia o jogo com o audio
     carregarAudio();
+    // Desestrutura o objeto retornado  para obter as referências
+    // do cenario, do estudante e do botão iniciar
     const {cenario, estudante, botaoIniciar} = elementosHTML();
+    // pega as dimensoes do cenario, desestruturando tbm
     const { larguraCenario, alturaCenario, larguraEstudante, alturaEstudante } = obterDimensoesDoCenario(cenario, estudante);
+    //calcula a posicao inicial do aluno de forma centalizada no cenario
     let estado = calcularPosicaoInicial(larguraCenario, larguraEstudante, alturaCenario, alturaEstudante);
 
+  // add o boss ao cenario. Garante que apenas um boss sera adicionado
     const bodyBoss = adicionarChefe(cenario);
-
+  // flag usada para parar o movimento do lopp, caso o estudante morra ou o boss
     let parar = false;
+
+     // funcao interna para manipular a pontuaçcao e checar se o jogo deve terminar ou nao
     const manipularPontuacao = (morreu, callback) => {
       console.log("manipular", morreu);
-  
+
+      //se o jogador morreu, a flag `parar` é definida como verdadeira para parar o jogo
       if (morreu) {
         parar = morreu;
+        ///exibe uma alerta na tela infromando q o estudante morreu e logo apos volta pora tela inicial
         if (alert("Estudante morreu!") === undefined) {
-          // FAZER O MESMO QUANDO O BOSS MORRE DAR REFESH NA PAG
+          // FAZER O MESMO QUANDO O BOSS MORRE DAR REFESH NA PAG, por questoes de tempo, nao foi criado
           location.reload();
         }
       }
       
     };
-  
+    // Funcao que tem o loop principal do jogo.
+    // o loop é chamado repetidamente para atualizar a posicao do estudante a todo momento
     const loop = () => {
+      // se o jogo foi encerrado (parar = verdadeiro), a funcao retorna sem continuar o loop
         if (parar) return;
         estado = moverEstudante(estado,larguraCenario, larguraEstudante, alturaCenario, alturaEstudante);
         manipularDom(estudante, estado);
@@ -340,19 +359,24 @@ const iniciarJogo = () => {
         animationId = requestAnimationFrame(loop);
     };
 
-
+    // inicia o movimento do boss e passa manipularPontuacao como cb
      movimentochefe(bodyBoss, larguraCenario, cenario, manipularPontuacao);
+    
     loop();
 
     document.addEventListener("keydown", (event) => {
+              // atualiza a direcao do movimento com  na tecla pressionada
+
         estado = teclaPressionada(estado, event.key);
+        // Se a tecla de espaço for pressionada o estudante solta tiro
+
         if (event.key === " ") atirar(cenario, estado, larguraEstudante, bodyBoss);
     });
 
     document.addEventListener("keyup", (event) => {
         estado = teclaNaoPressionada(estado, event.key);
     });
-
+//econde o botao de iniciar
     botaoIniciar.style.display = "none";
 };
 
